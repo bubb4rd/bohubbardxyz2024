@@ -1,6 +1,7 @@
 import type { IconType } from "react-icons";
 import { BiLogoAdobe, BiLogoWindows } from "react-icons/bi";
 import {
+  SiAndroid,
   SiApple,
   SiCplusplus,
   SiCss,
@@ -8,7 +9,9 @@ import {
   SiFirebase,
   SiGit,
   SiGithub,
+  SiGreensock,
   SiHtml5,
+  SiIos,
   SiJavascript,
   SiMongodb,
   SiNodedotjs,
@@ -17,7 +20,9 @@ import {
   SiReact,
   SiSwift,
   SiTailwindcss,
+  SiThreedotjs,
   SiTypescript,
+  SiWordpress,
 } from "react-icons/si";
 import { Database, Layers, Waypoints } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -34,6 +39,11 @@ const iconMap: Record<string, IconType> = {
   html: SiHtml5,
   css: SiCss,
   tailwindcss: SiTailwindcss,
+  threedotjs: SiThreedotjs,
+  gsap: SiGreensock,
+  wordpress: SiWordpress,
+  ios: SiIos,
+  android: SiAndroid,
   git: SiGit,
   github: SiGithub,
   mongodb: SiMongodb,

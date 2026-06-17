@@ -1,9 +1,8 @@
 export const heroRoles = [
   "Software Developer",
-  "iOS Developer",
+  "App Developer",
   "UI Designer",
   "Graphic Designer",
-  "Full-Stack Developer",
 ];
 
 export type TimelineEntry = {
@@ -16,6 +15,8 @@ export type TimelineEntry = {
   end: string;
   description: string;
   accent: string;
+  image: string;
+  imageAlt: string;
 };
 
 export const timelineEntries: TimelineEntry[] = [
@@ -27,8 +28,11 @@ export const timelineEntries: TimelineEntry[] = [
     location: "Wilmette, IL",
     start: "June 2026",
     end: "Present",
-    description: "Building WKCC Perks, a SwiftUI app for 50+ local chamber businesses.",
+    description: "Building WKCC Perks, a SwiftUI app for 50+ local chamber businesses, and more.",
     accent: "#3B82F6",
+    image:
+      "/images/WKCCLogo.png",
+    imageAlt: "iPhone displaying a mobile application interface",
   },
   {
     id: "asu-design",
@@ -40,6 +44,8 @@ export const timelineEntries: TimelineEntry[] = [
     end: "May 2026",
     description: "On-brand graphics for university marketing and events.",
     accent: "#F472B6",
+    image: "/images/A41.jpg",
+    imageAlt: "Graphic design work created for Arizona State University marketing",
   },
   {
     id: "main-event",
@@ -51,6 +57,9 @@ export const timelineEntries: TimelineEntry[] = [
     end: "May 2025",
     description: "Kept 100+ arcade and computer systems up and running.",
     accent: "#06B6D4",
+    image:
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Arcade entertainment floor with glowing game cabinets",
   },
   {
     id: "asu",
@@ -63,5 +72,7 @@ export const timelineEntries: TimelineEntry[] = [
     description:
       "Software Engineering, Human Computer Interaction, and design foundations.",
     accent: "#8B5CF6",
+    image: "/images/asu.jpg",
+    imageAlt: "Bo Hubbard at ASU graduation in maroon and gold regalia",
   },
 ];

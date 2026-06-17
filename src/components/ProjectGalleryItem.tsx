@@ -93,11 +93,7 @@ function GalleryContent({ project }: { project: Project }) {
               alt={project.title}
               fill
               className="object-cover"
-              sizes={
-                project.featured
-                  ? "(max-width: 768px) 100vw, 70vw"
-                  : "(max-width: 768px) 100vw, 35vw"
-              }
+
             />
           ) : (
             <div

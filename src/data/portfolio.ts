@@ -76,7 +76,7 @@ export const projects: Project[] = [
     href: "https://discord.com/oauth2/authorize?client_id=1184364896071196672&permissions=8&scope=bot",
     category: "dev",
     accent: "#F59E0B",
-    image: "/images/banana-project.png",
+    image: "/images/banana-project.jpg",
   },
   {
     id: "temporal-haven",
@@ -89,6 +89,6 @@ export const projects: Project[] = [
     category: "dev",
     accent: "#10B981",
     image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop",
+      "/images/temporal.jpg",
   },
 ];

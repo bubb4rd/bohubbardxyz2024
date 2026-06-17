@@ -17,6 +17,12 @@
     var(--accent-violet) 50%,
     var(--accent-coral) 100%
   );
+  --gradient-hero-design: linear-gradient(
+    135deg,
+    #db3a34 0%,
+    #c4332e 52%,
+    #9e2925 100%
+  );
   --gradient-subtle: linear-gradient(
     135deg,
     rgba(59, 130, 246, 0.08) 0%,
@@ -243,10 +249,10 @@ html.menu-open {
     var(--accent-coral),
     var(--accent-blue)
   );
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9);
   transform-origin: center center;
   animation: about-photo-glow-spin 5s linear infinite;
-  filter: blur(48px);
+  filter: blur(43px);
   opacity: 0.1;
 }
 
@@ -289,8 +295,45 @@ html.menu-open {
 
 @keyframes about-photo-glow-spin {
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) scale(0.9) rotate(360deg);
   }
+}
+
+.experience-preview {
+  position: relative;
+}
+
+.experience-preview__glow {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  right: 8%;
+  height: 50%;
+  border-radius: 9999px;
+  filter: blur(44px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.experience-preview__frame {
+  position: relative;
+  z-index: 1;
+}
+
+.experience-timeline-wrap::before {
+  content: "";
+  position: absolute;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    var(--border),
+    color-mix(in srgb, var(--accent-violet) 30%, var(--border)),
+    var(--border)
+  );
+  pointer-events: none;
 }
 
 /* Hero background */
@@ -362,7 +405,7 @@ html.menu-open {
 }
 
 .hero-gradient-text {
-  background: var(--gradient-brand);
+  background: var(--gradient-hero-design);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

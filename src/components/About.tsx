@@ -1,13 +1,14 @@
 import Image from "next/image";
+import { AboutLocationBlurb } from "./AboutLocationBlurb";
 import { Reveal } from "./Reveal";
 
 export function About() {
   return (
     <section id="about" className="section-padding bg-background">
       <div className="container-wide">
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(300px,420px)_1fr] lg:gap-16">
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(340px,480px)_1fr] lg:gap-16">
           <Reveal>
-            <div className="mx-auto w-full max-w-md lg:max-w-none">
+            <div className="mx-auto w-full max-w-lg lg:max-w-none">
               <div className="about-photo-wrapper">
                 <div className="about-photo-glow" aria-hidden="true" />
                 <div className="about-photo-frame rounded-2xl p-[2px]">
@@ -39,9 +40,7 @@ export function About() {
             <Reveal delay={0.1}>
               <div className="space-y-5 text-base leading-relaxed text-muted">
                 <p>
-                  I am a Computer Science graduate based in Chicago, Illinois
-                  with a strong focus on building thoughtful, user-centered
-                  software. I like to combine technical development with my eye
+                  I am a Computer Science graduate based in Chicago, IL. I like to combine technical development with my eye
                   for design, aiming to create products and software that are
                   intuitive and engaging.
                 </p>
@@ -61,6 +60,12 @@ export function About() {
                   iterative, and focused.
                 </p>
               </div>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <ul className="flex flex-wrap gap-3" aria-label="Quick facts">
+                <AboutLocationBlurb />
+              </ul>
             </Reveal>
           </div>
         </div>
