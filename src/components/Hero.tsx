@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import { resumeLink } from "@/data/contact";
 import { RotatingRoles } from "./RotatingRoles";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
@@ -18,6 +19,7 @@ const HeroScene = dynamic(
 export function Hero() {
   const containerRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
+  const ResumeIcon = resumeLink.icon;
 
   useGSAP(
     () => {
@@ -79,13 +81,23 @@ export function Hero() {
               purpose.
             </p>
 
-            <a
-              href="#about"
-              className="hero-bottom-item mt-5 inline-flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-foreground transition-opacity duration-300 hover:opacity-70"
-            >
-              Know more
-              <ArrowRight className="h-4 w-4" strokeWidth={2} />
-            </a>
+            <div className="hero-bottom-item mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href={resumeLink.href}
+                download
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 py-2.5 font-display text-sm font-semibold text-background transition-opacity duration-300 hover:opacity-90"
+              >
+                {resumeLink.label}
+                <ResumeIcon className="h-4 w-4" strokeWidth={2} />
+              </a>
+              <a
+                href="#about"
+                className="inline-flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-foreground transition-opacity duration-300 hover:opacity-70"
+              >
+                Know more
+                <ArrowRight className="h-4 w-4" strokeWidth={2} />
+              </a>
+            </div>
           </div>
         </div>
       </div>
