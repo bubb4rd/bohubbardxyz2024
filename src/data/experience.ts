@@ -58,7 +58,7 @@ export const timelineEntries: TimelineEntry[] = [
     title: "B.S. Computer Science",
     organization: "Arizona State University",
     location: "Tempe, AZ",
-    start: "2022",
+    start: "Aug 2022",
     end: "May 2026",
     description:
       "Software Engineering, Human Computer Interaction, and design foundations.",
