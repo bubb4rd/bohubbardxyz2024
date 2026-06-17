@@ -79,6 +79,10 @@ export function ProjectGalleryItem({ project }: ProjectGalleryItemProps) {
 }
 
 function GalleryContent({ project }: { project: Project }) {
+  const imageSizes = project.featured
+    ? "(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 900px"
+    : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px";
+
   return (
     <>
       <div
@@ -92,8 +96,8 @@ function GalleryContent({ project }: { project: Project }) {
               src={project.image}
               alt={project.title}
               fill
+              sizes={imageSizes}
               className="object-cover"
-
             />
           ) : (
             <div

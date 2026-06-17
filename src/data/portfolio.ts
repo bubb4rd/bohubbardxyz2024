@@ -88,7 +88,6 @@ export const projects: Project[] = [
     href: "https://github.com/bubb4rd/temporal_haven",
     category: "dev",
     accent: "#10B981",
-    image:
-      "/images/temporal.jpg",
+    image: "/images/temporal.jpg",
   },
 ];

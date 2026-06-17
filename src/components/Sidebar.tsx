@@ -242,7 +242,15 @@ export function Sidebar() {
             aria-label="Bo Hubbard home"
           >
             <span className="text-base leading-none">
-              BH<span className="text-gradient">.</span>
+              {isExpanded ? (
+                <>
+                  BOHUBBARD<span className="text-gradient">.</span>
+                </>
+              ) : (
+                <>
+                  BH<span className="text-gradient">.</span>
+                </>
+              )}
             </span>
           </a>
 
