@@ -24,6 +24,17 @@ function isPublicAsset(pathname: string) {
   );
 }
 
+function isAdminSubdomain(hostname: string) {
+  return hostname === ADMIN_HOST || hostname === `www.${ADMIN_HOST}`;
+}
+
+function redirectToLogin(request: NextRequest, nextPath: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = "/admin/login";
+  url.searchParams.set("next", nextPath);
+  return NextResponse.redirect(url);
+}
+
 async function getUser(request: NextRequest) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -53,13 +64,12 @@ export async function middleware(request: NextRequest) {
   const hostname = getHostname(request);
   const { pathname } = request.nextUrl;
   const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
-  const isAdminHost =
-    hostname === ADMIN_HOST ||
-    hostname === `www.${ADMIN_HOST}` ||
-    (isLocalhost && isAdminPath(pathname));
+  const onAdminSubdomain = isAdminSubdomain(hostname);
+  const isAdminContext =
+    onAdminSubdomain || (isLocalhost && isAdminPath(pathname));
 
   if (isPublicAsset(pathname)) {
-    return updateSession(request);
+    return supabaseConfigured ? updateSession(request) : NextResponse.next();
   }
 
   if (
@@ -73,40 +83,56 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (isAdminHost) {
-    if (!isAdminPath(pathname) && pathname !== "/") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/admin";
-      return NextResponse.rewrite(url);
-    }
+  if (isAdminContext) {
+    const onLogin = pathname === "/admin/login";
 
-    if (pathname === "/") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/admin";
-      return NextResponse.rewrite(url);
-    }
-
-    if (pathname === "/admin/login") {
+    if (onLogin) {
       if (supabaseConfigured) {
         const user = await getUser(request);
         if (user) {
-          const url = request.nextUrl.clone();
-          url.pathname = "/admin";
-          return NextResponse.redirect(url);
+          return NextResponse.redirect(new URL("/admin", request.url));
         }
+        return updateSession(request);
       }
-      return updateSession(request);
+      return NextResponse.next();
     }
 
-    if (isAdminPath(pathname) && supabaseConfigured) {
-      const user = await getUser(request);
-      if (!user) {
+    if (!supabaseConfigured) {
+      const nextPath =
+        onAdminSubdomain && pathname === "/"
+          ? "/admin"
+          : isAdminPath(pathname)
+            ? pathname
+            : "/admin";
+      return redirectToLogin(request, nextPath);
+    }
+
+    const user = await getUser(request);
+    if (!user) {
+      const nextPath =
+        onAdminSubdomain && pathname === "/"
+          ? "/admin"
+          : isAdminPath(pathname)
+            ? pathname
+            : "/admin";
+      return redirectToLogin(request, nextPath);
+    }
+
+    if (onAdminSubdomain) {
+      if (!isAdminPath(pathname) && pathname !== "/") {
         const url = request.nextUrl.clone();
-        url.pathname = "/admin/login";
-        url.searchParams.set("next", pathname);
-        return NextResponse.redirect(url);
+        url.pathname = "/admin";
+        return NextResponse.rewrite(url);
+      }
+
+      if (pathname === "/") {
+        const url = request.nextUrl.clone();
+        url.pathname = "/admin";
+        return NextResponse.rewrite(url);
       }
     }
+
+    return updateSession(request);
   }
 
   if (!supabaseConfigured) {
