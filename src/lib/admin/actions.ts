@@ -5,6 +5,13 @@ import { revalidatePortfolio } from "@/lib/content/revalidate";
 import { requireUser, type ActionResult } from "@/lib/admin/auth";
 import type { SocialLinkIcon } from "@/lib/content/types";
 
+function normalizeOptionalUrl(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
+
 export async function signIn(
   _prev: ActionResult | null,
   formData: FormData,
@@ -124,8 +131,8 @@ export async function saveProject(
       subtitle: String(formData.get("subtitle") ?? ""),
       description: String(formData.get("description") ?? ""),
       tags,
-      href: String(formData.get("href") ?? "") || null,
-      github: String(formData.get("github") ?? "") || null,
+      href: normalizeOptionalUrl(String(formData.get("href") ?? "")),
+      github: normalizeOptionalUrl(String(formData.get("github") ?? "")),
       category: String(formData.get("category") ?? "dev") as "dev" | "design",
       accent: String(formData.get("accent") ?? "#3B82F6"),
       image_url: String(formData.get("image_url") ?? "") || null,
@@ -141,8 +148,20 @@ export async function saveProject(
 
     revalidatePortfolio();
     return { ok: true, message: "Project saved." };
-  } catch {
-    return { ok: false, message: "Unauthorized" };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Something went wrong";
+    if (message === "Supabase is not configured") {
+      return {
+        ok: false,
+        message:
+          "Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local.",
+      };
+    }
+    if (message === "Unauthorized") {
+      return { ok: false, message: "Unauthorized. Sign in again and retry." };
+    }
+    return { ok: false, message };
   }
 }
 

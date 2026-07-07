@@ -99,7 +99,9 @@ export function ProjectForm({
             <input
               id="href"
               name="href"
-              type="url"
+              type="text"
+              inputMode="url"
+              placeholder="https://example.com"
               defaultValue={project?.href ?? ""}
               className="admin-input w-full"
             />
@@ -111,7 +113,9 @@ export function ProjectForm({
             <input
               id="github"
               name="github"
-              type="url"
+              type="text"
+              inputMode="url"
+              placeholder="https://github.com/..."
               defaultValue={project?.github ?? ""}
               className="admin-input w-full"
             />

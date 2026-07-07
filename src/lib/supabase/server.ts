@@ -1,13 +1,26 @@
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export async function createClient() {
+function getSupabaseEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) {
     throw new Error("Supabase is not configured");
   }
+  return { url, key };
+}
 
+/** Cookie-free client for public reads inside cached functions. */
+export function createPublicClient() {
+  const { url, key } = getSupabaseEnv();
+  return createSupabaseClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
+export async function createClient() {
+  const { url, key } = getSupabaseEnv();
   const cookieStore = await cookies();
 
   return createServerClient(url, key, {

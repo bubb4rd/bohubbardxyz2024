@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createPublicClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { seedContent } from "@/lib/content/seed";
 import { PORTFOLIO_TAG } from "@/lib/content/revalidate";
 import type {
@@ -107,7 +107,7 @@ async function fetchPortfolioContent(): Promise<PortfolioContent> {
     return seedContent;
   }
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const [
     settingsResult,
@@ -132,23 +132,24 @@ async function fetchPortfolioContent(): Promise<PortfolioContent> {
   const skills = (skillsResult.data as DbSkill[] | null) ?? [];
   const social = (socialResult.data as DbSocialLink[] | null) ?? [];
 
-  const hasData =
-    settingsRow &&
-    projects.length > 0 &&
-    timeline.length > 0 &&
-    categories.length > 0;
-
-  if (!hasData) {
-    return seedContent;
-  }
-
-  const settings = mapSettings(settingsRow);
+  const settings = settingsRow
+    ? mapSettings(settingsRow)
+    : seedContent.settings;
 
   return {
     settings,
-    projects: projects.map(mapProject),
-    timelineEntries: timeline.map(mapTimelineEntry),
-    skillCategories: mapSkillCategories(categories, skills),
+    projects:
+      projects.length > 0
+        ? projects.map(mapProject)
+        : seedContent.projects,
+    timelineEntries:
+      timeline.length > 0
+        ? timeline.map(mapTimelineEntry)
+        : seedContent.timelineEntries,
+    skillCategories:
+      categories.length > 0
+        ? mapSkillCategories(categories, skills)
+        : seedContent.skillCategories,
     socialLinks:
       social.length > 0 ? mapSocialLinks(social) : seedContent.socialLinks,
     resumeLink: {
