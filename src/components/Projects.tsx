@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { projects } from "@/data/portfolio";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { Project } from "@/lib/content/types";
 import { ProjectGalleryItem } from "./ProjectGalleryItem";
 import { Reveal } from "./Reveal";
 
@@ -24,7 +24,7 @@ function ProjectFilters({
   const buttonRefs = useRef<Partial<Record<FilterId, HTMLButtonElement>>>({});
   const [indicator, setIndicator] = useState({ width: 0, left: 0 });
 
-  const updateIndicator = () => {
+  const updateIndicator = useCallback(() => {
     const track = trackRef.current;
     const button = buttonRefs.current[active];
     if (!track || !button) return;
@@ -33,11 +33,11 @@ function ProjectFilters({
       left: button.offsetLeft,
       width: button.offsetWidth,
     });
-  };
+  }, [active]);
 
   useLayoutEffect(() => {
     updateIndicator();
-  }, [active]);
+  }, [updateIndicator]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -51,7 +51,7 @@ function ProjectFilters({
       observer.disconnect();
       window.removeEventListener("resize", updateIndicator);
     };
-  }, [active]);
+  }, [updateIndicator]);
 
   return (
     <div
@@ -92,7 +92,7 @@ function ProjectFilters({
   );
 }
 
-export function Projects() {
+export function Projects({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<FilterId>("all");
 
   const filtered =

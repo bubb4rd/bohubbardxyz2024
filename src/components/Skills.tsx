@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { skillCategories, type SkillCategory, type SkillItem } from "@/data/skills";
+import type { SkillCategory, SkillItem } from "@/lib/content/types";
 import { SkillIcon } from "./SkillIcon";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -138,7 +138,11 @@ function SkillCategoryCard({
   );
 }
 
-export function Skills() {
+export function Skills({
+  skillCategories,
+}: {
+  skillCategories: SkillCategory[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
 

@@ -4,6 +4,13 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # NEXT_PUBLIC_* values are embedded in client/edge bundles by design.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_ADMIN_HOST,NEXT_PUBLIC_PUBLIC_HOST,NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
+
+# Add domain alias admin.bohubbard.xyz in Netlify UI (Domain settings).
+# Set env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
+# SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_ADMIN_HOST, NEXT_PUBLIC_PUBLIC_HOST, NEXT_PUBLIC_SITE_URL.
+# Use non-secret scopes for NEXT_PUBLIC_* vars in the Netlify UI.
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
