@@ -175,6 +175,41 @@ export async function deleteProject(id: string): Promise<void> {
   }
 }
 
+export async function reorderProjects(
+  orderedIds: string[],
+): Promise<ActionResult> {
+  try {
+    const { supabase } = await requireUser();
+
+    if (orderedIds.length === 0) {
+      return { ok: true, message: "Order saved." };
+    }
+
+    const updatedAt = new Date().toISOString();
+    const results = await Promise.all(
+      orderedIds.map((id, index) =>
+        supabase
+          .from("projects")
+          .update({ sort_order: index, updated_at: updatedAt })
+          .eq("id", id),
+      ),
+    );
+
+    const error = results.find((result) => result.error)?.error;
+    if (error) return { ok: false, message: error.message };
+
+    revalidatePortfolio();
+    return { ok: true, message: "Order saved." };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Something went wrong";
+    if (message === "Unauthorized") {
+      return { ok: false, message: "Unauthorized. Sign in again and retry." };
+    }
+    return { ok: false, message };
+  }
+}
+
 export async function saveTimelineEntry(
   _prev: ActionResult | null,
   formData: FormData,
