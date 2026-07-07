@@ -65,8 +65,9 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
   const onAdminSubdomain = isAdminSubdomain(hostname);
-  const isAdminContext =
-    onAdminSubdomain || (isLocalhost && isAdminPath(pathname));
+  const onLogin = pathname === "/admin/login";
+  const isProtectedAdminRoute =
+    (isAdminPath(pathname) && !onLogin) || (onAdminSubdomain && pathname === "/");
 
   if (isPublicAsset(pathname)) {
     return supabaseConfigured ? updateSession(request) : NextResponse.next();
@@ -83,56 +84,43 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (isAdminContext) {
-    const onLogin = pathname === "/admin/login";
-
-    if (onLogin) {
-      if (supabaseConfigured) {
-        const user = await getUser(request);
-        if (user) {
-          return NextResponse.redirect(new URL("/admin", request.url));
-        }
-        return updateSession(request);
+  if (onLogin) {
+    if (supabaseConfigured) {
+      const user = await getUser(request);
+      if (user) {
+        return NextResponse.redirect(new URL("/admin", request.url));
       }
-      return NextResponse.next();
+      return updateSession(request);
     }
+    return NextResponse.next();
+  }
+
+  if (isProtectedAdminRoute) {
+    const nextPath =
+      onAdminSubdomain && pathname === "/" ? "/admin" : pathname;
 
     if (!supabaseConfigured) {
-      const nextPath =
-        onAdminSubdomain && pathname === "/"
-          ? "/admin"
-          : isAdminPath(pathname)
-            ? pathname
-            : "/admin";
       return redirectToLogin(request, nextPath);
     }
 
     const user = await getUser(request);
     if (!user) {
-      const nextPath =
-        onAdminSubdomain && pathname === "/"
-          ? "/admin"
-          : isAdminPath(pathname)
-            ? pathname
-            : "/admin";
       return redirectToLogin(request, nextPath);
     }
+  }
 
-    if (onAdminSubdomain) {
-      if (!isAdminPath(pathname) && pathname !== "/") {
-        const url = request.nextUrl.clone();
-        url.pathname = "/admin";
-        return NextResponse.rewrite(url);
-      }
-
-      if (pathname === "/") {
-        const url = request.nextUrl.clone();
-        url.pathname = "/admin";
-        return NextResponse.rewrite(url);
-      }
+  if (onAdminSubdomain) {
+    if (!isAdminPath(pathname) && pathname !== "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      return NextResponse.rewrite(url);
     }
 
-    return updateSession(request);
+    if (pathname === "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      return NextResponse.rewrite(url);
+    }
   }
 
   if (!supabaseConfigured) {
