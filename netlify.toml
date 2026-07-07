@@ -5,5 +5,9 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Add domain alias admin.bohubbard.xyz in Netlify UI (Domain settings).
+# Set env vars from .env.example: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
+# SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_ADMIN_HOST, NEXT_PUBLIC_PUBLIC_HOST, NEXT_PUBLIC_SITE_URL.
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"

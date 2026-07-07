@@ -3,28 +3,45 @@
 import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
 
-const LOCATION = "Chicago, IL";
-const TIME_ZONE = "America/Chicago";
-
-function formatCentralTime(date: Date) {
+function formatLocalTime(date: Date, timezone: string) {
   return new Intl.DateTimeFormat("en-US", {
-    timeZone: TIME_ZONE,
+    timeZone: timezone,
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
   }).format(date);
 }
 
-export function AboutLocationBlurb() {
+function getTimezoneAbbreviation(timezone: string) {
+  if (timezone === "America/Chicago") return "CT";
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      timeZoneName: "short",
+    }).formatToParts(new Date());
+    return parts.find((part) => part.type === "timeZoneName")?.value ?? "local";
+  } catch {
+    return "local";
+  }
+}
+
+export function AboutLocationBlurb({
+  location,
+  timezone,
+}: {
+  location: string;
+  timezone: string;
+}) {
   const [time, setTime] = useState<string | null>(null);
+  const tzAbbr = getTimezoneAbbreviation(timezone);
 
   useEffect(() => {
-    const update = () => setTime(formatCentralTime(new Date()));
+    const update = () => setTime(formatLocalTime(new Date(), timezone));
     update();
 
     const interval = window.setInterval(update, 30_000);
     return () => window.clearInterval(interval);
-  }, []);
+  }, [timezone]);
 
   return (
     <li>
@@ -33,7 +50,7 @@ export function AboutLocationBlurb() {
           <MapPin className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
         </span>
         <span className="pr-1 text-sm font-medium text-foreground tabular-nums">
-          {LOCATION} ({time ? `${time} CT` : "—:— CT"})
+          {location} ({time ? `${time} ${tzAbbr}` : `—:— ${tzAbbr}`})
         </span>
       </span>
     </li>

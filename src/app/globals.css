@@ -591,3 +591,79 @@ html.menu-open {
     background: var(--gradient-brand);
   }
 }
+
+/* Admin CMS */
+.admin-shell {
+  background: #09090b;
+  color: #fafafa;
+}
+
+.admin-card {
+  border: 1px solid #27272a;
+  background: #18181b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.admin-input,
+.admin-textarea,
+.admin-select {
+  border: 1px solid #3f3f46;
+  background: #09090b;
+  color: #fafafa;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.admin-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.admin-textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.admin-button,
+.admin-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.admin-button {
+  background: #fafafa;
+  color: #18181b;
+}
+
+.admin-button-secondary {
+  border: 1px solid #3f3f46;
+  background: #27272a;
+  color: #fafafa;
+}
+
+.admin-button:hover,
+.admin-button-secondary:hover {
+  opacity: 0.9;
+}
+
+.admin-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e4e4e7;
+}
+
+.admin-field {
+  margin-bottom: 1rem;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { projects } from "@/data/portfolio";
+import type { Project } from "@/lib/content/types";
 import { ProjectGalleryItem } from "./ProjectGalleryItem";
 import { Reveal } from "./Reveal";
 
@@ -92,7 +92,7 @@ function ProjectFilters({
   );
 }
 
-export function Projects() {
+export function Projects({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<FilterId>("all");
 
   const filtered =

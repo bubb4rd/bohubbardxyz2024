@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Briefcase, GraduationCap } from "lucide-react";
-import { timelineEntries, type TimelineEntry } from "@/data/experience";
+import type { TimelineEntry } from "@/lib/content/types";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
@@ -14,9 +14,11 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 function TimelineImagePanel({
   entry,
+  allEntries,
   reducedMotion,
 }: {
   entry: TimelineEntry;
+  allEntries: TimelineEntry[];
   reducedMotion: boolean;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -36,11 +38,11 @@ function TimelineImagePanel({
   const backLayer = (top: 0 | 1): 0 | 1 => (top === 0 ? 1 : 0);
 
   useEffect(() => {
-    timelineEntries.forEach((item) => {
+    allEntries.forEach((item) => {
       const preload = new window.Image();
       preload.src = item.image;
     });
-  }, []);
+  }, [allEntries]);
 
   const applyLayerVisibility = (visibleIndex: 0 | 1) => {
     const hiddenIndex = backLayer(visibleIndex);
@@ -233,7 +235,7 @@ function TimelineImagePanel({
                 height={1050}
                 className="h-full w-full object-cover"
                 sizes="(max-width: 1024px) 100vw, 462px"
-                priority={layers[layerIndex].id === timelineEntries[0]?.id}
+                priority={layers[layerIndex].id === allEntries[0]?.id}
                 onLoad={scheduleTransitionAttempt}
               />
             </div>
@@ -343,7 +345,11 @@ function TimelineItem({
   );
 }
 
-export function ExperienceTimeline() {
+export function ExperienceTimeline({
+  timelineEntries,
+}: {
+  timelineEntries: TimelineEntry[];
+}) {
   const listRef = useRef<HTMLUListElement>(null);
   const pointerRef = useRef({ x: 0, y: 0, inside: false });
   const reducedMotion = usePrefersReducedMotion();
@@ -429,7 +435,11 @@ export function ExperienceTimeline() {
           </div>
 
           <aside className="experience-preview-aside order-1 lg:order-2 lg:sticky lg:top-28">
-            <TimelineImagePanel entry={activeEntry} reducedMotion={reducedMotion} />
+            <TimelineImagePanel
+              entry={activeEntry}
+              allEntries={timelineEntries}
+              reducedMotion={reducedMotion}
+            />
           </aside>
         </div>
       </div>
