@@ -3,11 +3,10 @@
 import {
   useCallback,
   useEffect,
-  useRef,
+  useLayoutEffect,
   useState,
   type CSSProperties,
   type MouseEvent,
-  type TransitionEvent,
 } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -98,76 +97,51 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [active, setActive] = useState(false);
-  const enterFrameRef = useRef<number | null>(null);
   const reducedMotion = usePrefersReducedMotion();
 
-  const close = useCallback(() => {
-    setOpen(false);
-    setActive(false);
-    if (reducedMotion) {
-      setMounted(false);
-    }
-  }, [reducedMotion]);
-
-  const openMenu = useCallback(() => {
-    setMounted(true);
-    setOpen(true);
-    setActive(reducedMotion);
-  }, [reducedMotion]);
-
-  const toggleMenu = useCallback(() => {
-    if (open) close();
-    else openMenu();
-  }, [open, close, openMenu]);
-
-  const panelRef = useCallback(
-    (node: HTMLElement | null) => {
-      if (enterFrameRef.current !== null) {
-        cancelAnimationFrame(enterFrameRef.current);
-        enterFrameRef.current = null;
-      }
-
-      if (!node || !open || reducedMotion || active) return;
-
-      enterFrameRef.current = requestAnimationFrame(() => {
-        enterFrameRef.current = requestAnimationFrame(() => {
-          enterFrameRef.current = null;
-          setActive(true);
-        });
-      });
-    },
-    [open, reducedMotion, active],
-  );
-
-  const handleOverlayTransitionEnd = useCallback(
-    (event: TransitionEvent<HTMLDivElement>) => {
-      if (event.target !== event.currentTarget || open) return;
-      setMounted(false);
-    },
-    [open],
-  );
+  const close = useCallback(() => setOpen(false), []);
 
   const handleNavClick = useCallback(
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      close();
+      setOpen(false);
       window.setTimeout(
         () => scrollToSection(href),
         reducedMotion ? 0 : ANIMATION_MS + 40,
       );
     },
-    [close, reducedMotion],
+    [reducedMotion],
   );
 
   useScrollLock(mounted);
 
   useEffect(() => {
-    return () => {
-      if (enterFrameRef.current !== null) {
-        cancelAnimationFrame(enterFrameRef.current);
-      }
-    };
-  }, []);
+    if (open) setMounted(true);
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!mounted || !open) return;
+
+    if (reducedMotion) {
+      setActive(true);
+      return;
+    }
+
+    setActive(false);
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setActive(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [mounted, open, reducedMotion]);
+
+  useEffect(() => {
+    if (open || !mounted) return;
+
+    setActive(false);
+    const duration = reducedMotion ? 0 : ANIMATION_MS;
+    const timer = window.setTimeout(() => setMounted(false), duration);
+    return () => window.clearTimeout(timer);
+  }, [open, mounted, reducedMotion]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -190,7 +164,6 @@ export function MobileNav() {
           reducedMotion ? "" : "transition-opacity duration-300 ease-out"
         } ${active ? "opacity-100" : "opacity-0"}`}
         role="presentation"
-        onTransitionEnd={handleOverlayTransitionEnd}
       >
         <button
           type="button"
@@ -201,7 +174,6 @@ export function MobileNav() {
 
         <nav
           id="mobile-nav-panel"
-          ref={panelRef}
           aria-label="Primary mobile"
           aria-hidden={!active}
           className={`absolute top-0 right-0 z-10 flex h-dvh w-[min(100%,20rem)] flex-col border-l border-border bg-surface pt-[env(safe-area-inset-top)] shadow-[-12px_0_40px_rgba(24,24,27,0.12)] ${transitionClass} ${
@@ -296,7 +268,7 @@ export function MobileNav() {
 
             <button
               type="button"
-              onClick={toggleMenu}
+              onClick={() => setOpen((value) => !value)}
               aria-expanded={open}
               aria-controls="mobile-nav-panel"
               aria-label={open ? "Close menu" : "Open menu"}

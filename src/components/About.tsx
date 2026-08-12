@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { AboutLocationBlurb } from "./AboutLocationBlurb";
 import { Reveal } from "./Reveal";
-import type { SiteSettings } from "@/lib/content/types";
 
-export function About({ settings }: { settings: SiteSettings }) {
+export function About() {
   return (
     <section id="about" className="section-padding bg-background">
       <div className="container-wide">
@@ -15,8 +14,8 @@ export function About({ settings }: { settings: SiteSettings }) {
                 <div className="about-photo-frame rounded-2xl p-[2px]">
                   <div className="about-photo-frame__inner overflow-hidden rounded-[14px] bg-surface">
                     <Image
-                      src={settings.aboutImageUrl}
-                      alt={settings.aboutImageAlt}
+                      src="/images/bo-hubbard-graduation.png"
+                      alt="Bo Hubbard at ASU graduation in maroon and gold regalia"
                       width={840}
                       height={1050}
                       className="aspect-[4/5] w-full object-cover object-top"
@@ -32,26 +31,40 @@ export function About({ settings }: { settings: SiteSettings }) {
             <Reveal delay={0.05}>
               <div>
                 <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {settings.aboutHeading}{" "}
-                  <span className="text-gradient">{settings.aboutSubheading}</span>
+                  Bo Hubbard{" "}
+                  <span className="text-gradient">developer &amp; designer</span>
                 </h2>
               </div>
             </Reveal>
 
             <Reveal delay={0.1}>
               <div className="space-y-5 text-base leading-relaxed text-muted">
-                {settings.aboutParagraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-                ))}
+                <p>
+                  I am a Computer Science graduate based in Chicago, IL. I like to combine technical development with my eye
+                  for design, aiming to create products and software that are
+                  intuitive and engaging.
+                </p>
+                <p>
+                  My passion for problem-solving drives everything I do.
+                  I&apos;m motivated, competitive, and persistent. I like the
+                  challenge of turning complex ideas into real solutions,
+                  especially if they improve how people interact with
+                  technology. I am always looking for ways to make software
+                  more meaningful and effective.
+                </p>
+                <p>
+                  My roots in technology started early through playing video
+                  games and building on sandbox platforms like Roblox, where I
+                  discovered the crossroads of problem-solving and creativity.
+                  That foundation continues to shape my approach — curious,
+                  iterative, and focused.
+                </p>
               </div>
             </Reveal>
 
             <Reveal delay={0.15}>
               <ul className="flex flex-wrap gap-3" aria-label="Quick facts">
-                <AboutLocationBlurb
-                  location={settings.location}
-                  timezone={settings.timezone}
-                />
+                <AboutLocationBlurb />
               </ul>
             </Reveal>
           </div>

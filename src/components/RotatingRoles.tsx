@@ -3,17 +3,12 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { heroRoles } from "@/data/experience";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(useGSAP);
 
-export function RotatingRoles({
-  roles,
-  className = "text-lg sm:text-xl",
-}: {
-  roles: string[];
-  className?: string;
-}) {
+export function RotatingRoles({ className = "text-lg sm:text-xl" }: { className?: string }) {
   const containerRef = useRef<HTMLSpanElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [roleIndex, setRoleIndex] = useState(0);
@@ -26,7 +21,7 @@ export function RotatingRoles({
       let index = 0;
 
       const cycle = () => {
-        const next = (index + 1) % roles.length;
+        const next = (index + 1) % heroRoles.length;
 
         gsap.to(textRef.current, {
           yPercent: -100,
@@ -70,7 +65,7 @@ export function RotatingRoles({
         ref={textRef}
         className="absolute inset-x-0 top-0 font-medium text-gradient whitespace-nowrap"
       >
-        {roles[roleIndex]}
+        {heroRoles[roleIndex]}
       </span>
     </span>
   );

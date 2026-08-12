@@ -3,11 +3,11 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Download, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import { resumeLink } from "@/data/contact";
 import { RotatingRoles } from "./RotatingRoles";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import type { ResumeLink, SiteSettings } from "@/lib/content/types";
 
 gsap.registerPlugin(useGSAP);
 
@@ -16,15 +16,10 @@ const HeroScene = dynamic(
   { ssr: false },
 );
 
-export function Hero({
-  settings,
-  resumeLink,
-}: {
-  settings: SiteSettings;
-  resumeLink: ResumeLink;
-}) {
+export function Hero() {
   const containerRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
+  const ResumeIcon = resumeLink.icon;
 
   useGSAP(
     () => {
@@ -63,26 +58,27 @@ export function Hero({
           <div className="hero-headline-stage flex min-h-0 items-center justify-center px-2 py-8 sm:px-6 sm:py-12 md:py-16">
             <div className="hero-headline-wrap text-center">
               <h1 className="hero-headline font-display font-semibold">
-                <span className="hero-line-1 block text-foreground">{settings.heroLine1}</span>
-                <span className="hero-line-2 hero-gradient-text block">{settings.heroLine2}</span>
+                <span className="hero-line-1 block text-foreground">Intentional</span>
+                <span className="hero-line-2 hero-gradient-text block">Design.</span>
               </h1>
               <p className="hero-name mt-5 font-display text-2xl font-medium tracking-tight text-muted sm:mt-6 sm:text-3xl">
-                {settings.name}
+                Bo Hubbard
               </p>
             </div>
           </div>
 
           <div className="hero-bottom shrink-0 pb-8 md:max-w-sm md:pb-10">
             <div className="hero-bottom-item mt-2">
-              <RotatingRoles roles={settings.heroRoles} className="text-base sm:text-lg" />
+              <RotatingRoles className="text-base sm:text-lg" />
             </div>
 
             <p className="hero-bottom-item mt-4 text-sm text-muted">
-              {settings.credential}
+              B.S. Computer Science · Class of 2026
             </p>
 
             <p className="hero-bottom-item mt-4 text-sm leading-relaxed text-muted md:text-base">
-              {settings.subtext}
+              Software development, graphic design, and interfaces built with
+              purpose.
             </p>
 
             <div className="hero-bottom-item mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -92,7 +88,7 @@ export function Hero({
                 className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 py-2.5 font-display text-sm font-semibold text-background transition-opacity duration-300 hover:opacity-90"
               >
                 {resumeLink.label}
-                <Download className="h-4 w-4" strokeWidth={2} />
+                <ResumeIcon className="h-4 w-4" strokeWidth={2} />
               </a>
               <a
                 href="#about"

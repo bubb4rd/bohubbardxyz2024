@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowUpRight, ImageIcon } from "lucide-react";
-import type { Project } from "@/lib/content/types";
+import type { Project } from "@/data/portfolio";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(useGSAP);

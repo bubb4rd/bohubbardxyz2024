@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Briefcase, GraduationCap } from "lucide-react";
-import type { TimelineEntry } from "@/lib/content/types";
+import { timelineEntries, type TimelineEntry } from "@/data/experience";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
@@ -14,11 +14,9 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 function TimelineImagePanel({
   entry,
-  allEntries,
   reducedMotion,
 }: {
   entry: TimelineEntry;
-  allEntries: TimelineEntry[];
   reducedMotion: boolean;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -32,98 +30,85 @@ function TimelineImagePanel({
   const [topLayer, setTopLayer] = useState<0 | 1>(0);
   const [layers, setLayers] = useState<[TimelineEntry, TimelineEntry]>([entry, entry]);
 
-  useEffect(() => {
-    topLayerRef.current = topLayer;
-    layersRef.current = layers;
-  }, [topLayer, layers]);
+  topLayerRef.current = topLayer;
+  layersRef.current = layers;
 
-  const backLayer = useCallback((top: 0 | 1): 0 | 1 => (top === 0 ? 1 : 0), []);
+  const backLayer = (top: 0 | 1): 0 | 1 => (top === 0 ? 1 : 0);
 
   useEffect(() => {
-    allEntries.forEach((item) => {
+    timelineEntries.forEach((item) => {
       const preload = new window.Image();
       preload.src = item.image;
     });
-  }, [allEntries]);
+  }, []);
 
-  const applyLayerVisibility = useCallback(
-    (visibleIndex: 0 | 1) => {
-      const hiddenIndex = backLayer(visibleIndex);
-      const visibleEl = layerRefs.current[visibleIndex];
-      const hiddenEl = layerRefs.current[hiddenIndex];
-      if (visibleEl) gsap.set(visibleEl, { autoAlpha: 1, scale: 1, zIndex: 2 });
-      if (hiddenEl) gsap.set(hiddenEl, { autoAlpha: 0, scale: 1.015, zIndex: 1 });
-    },
-    [backLayer],
-  );
+  const applyLayerVisibility = (visibleIndex: 0 | 1) => {
+    const hiddenIndex = backLayer(visibleIndex);
+    const visibleEl = layerRefs.current[visibleIndex];
+    const hiddenEl = layerRefs.current[hiddenIndex];
+    if (visibleEl) gsap.set(visibleEl, { autoAlpha: 1, scale: 1, zIndex: 2 });
+    if (hiddenEl) gsap.set(hiddenEl, { autoAlpha: 0, scale: 1.015, zIndex: 1 });
+  };
 
-  const snapToEntry = useCallback(
-    (target: TimelineEntry) => {
-      fadeTweenRef.current?.kill();
-      fadeTweenRef.current = null;
-      pendingEntryRef.current = null;
+  const snapToEntry = (target: TimelineEntry) => {
+    fadeTweenRef.current?.kill();
+    fadeTweenRef.current = null;
+    pendingEntryRef.current = null;
 
-      const currentTop = topLayerRef.current;
-      if (layersRef.current[currentTop].id === target.id) {
-        applyLayerVisibility(currentTop);
-        return;
-      }
+    const currentTop = topLayerRef.current;
+    if (layersRef.current[currentTop].id === target.id) {
+      applyLayerVisibility(currentTop);
+      return;
+    }
 
-      const nextTop = backLayer(currentTop);
-      const nextLayers: [TimelineEntry, TimelineEntry] = [
-        layersRef.current[0],
-        layersRef.current[1],
-      ];
-      nextLayers[nextTop] = target;
+    const nextTop = backLayer(currentTop);
+    const nextLayers: [TimelineEntry, TimelineEntry] = [
+      layersRef.current[0],
+      layersRef.current[1],
+    ];
+    nextLayers[nextTop] = target;
 
-      layersRef.current = nextLayers;
-      topLayerRef.current = nextTop;
-      setLayers(nextLayers);
-      setTopLayer(nextTop);
-      requestAnimationFrame(() => applyLayerVisibility(nextTop));
-    },
-    [applyLayerVisibility, backLayer],
-  );
+    layersRef.current = nextLayers;
+    topLayerRef.current = nextTop;
+    setLayers(nextLayers);
+    setTopLayer(nextTop);
+    requestAnimationFrame(() => applyLayerVisibility(nextTop));
+  };
 
-  const scheduleTransitionAttemptRef = useRef<() => void>(() => {});
+  const fadeInLayer = (layerIndex: 0 | 1, targetEntry: TimelineEntry) => {
+    const layerEl = layerRefs.current[layerIndex];
+    const frontIndex = topLayerRef.current;
+    const frontEl = layerRefs.current[frontIndex];
+    if (!layerEl) return;
 
-  const fadeInLayer = useCallback(
-    (layerIndex: 0 | 1, targetEntry: TimelineEntry) => {
-      const layerEl = layerRefs.current[layerIndex];
-      const frontIndex = topLayerRef.current;
-      const frontEl = layerRefs.current[frontIndex];
-      if (!layerEl) return;
+    fadeTweenRef.current?.kill();
+    fadeTweenRef.current = null;
 
-      fadeTweenRef.current?.kill();
-      fadeTweenRef.current = null;
+    if (frontEl) gsap.set(frontEl, { zIndex: 1, autoAlpha: 1, scale: 1 });
+    gsap.set(layerEl, { zIndex: 2, autoAlpha: 0, scale: 1.015 });
 
-      if (frontEl) gsap.set(frontEl, { zIndex: 1, autoAlpha: 1, scale: 1 });
-      gsap.set(layerEl, { zIndex: 2, autoAlpha: 0, scale: 1.015 });
+    fadeTweenRef.current = gsap.to(layerEl, {
+      autoAlpha: 1,
+      scale: 1,
+      duration: 0.38,
+      ease: "power2.out",
+      onComplete: () => {
+        fadeTweenRef.current = null;
 
-      fadeTweenRef.current = gsap.to(layerEl, {
-        autoAlpha: 1,
-        scale: 1,
-        duration: 0.38,
-        ease: "power2.out",
-        onComplete: () => {
-          fadeTweenRef.current = null;
+        if (pendingEntryRef.current?.id !== targetEntry.id) {
+          scheduleTransitionAttempt();
+          return;
+        }
 
-          if (pendingEntryRef.current?.id !== targetEntry.id) {
-            scheduleTransitionAttemptRef.current();
-            return;
-          }
+        pendingEntryRef.current = null;
+        topLayerRef.current = layerIndex;
+        setTopLayer(layerIndex);
+        applyLayerVisibility(layerIndex);
+      },
+    });
+  };
 
-          pendingEntryRef.current = null;
-          topLayerRef.current = layerIndex;
-          setTopLayer(layerIndex);
-          applyLayerVisibility(layerIndex);
-        },
-      });
-    },
-    [applyLayerVisibility],
-  );
-
-  const tryFadeToPending = useCallback(() => {
+  const tryFadeToPending = () => {
     const pending = pendingEntryRef.current;
     if (!pending || reducedMotion) return;
 
@@ -141,16 +126,12 @@ function TimelineImagePanel({
     if (!img?.complete) return;
 
     fadeInLayer(nextBack, pending);
-  }, [applyLayerVisibility, backLayer, fadeInLayer, reducedMotion]);
+  };
 
-  const scheduleTransitionAttempt = useCallback(() => {
+  const scheduleTransitionAttempt = () => {
     queueMicrotask(tryFadeToPending);
     requestAnimationFrame(tryFadeToPending);
-  }, [tryFadeToPending]);
-
-  useEffect(() => {
-    scheduleTransitionAttemptRef.current = scheduleTransitionAttempt;
-  }, [scheduleTransitionAttempt]);
+  };
 
   useGSAP(
     () => {
@@ -191,18 +172,11 @@ function TimelineImagePanel({
     if (hiddenEl) gsap.set(hiddenEl, { autoAlpha: 0, scale: 1.015, zIndex: 1 });
 
     scheduleTransitionAttempt();
-  }, [
-    applyLayerVisibility,
-    backLayer,
-    entry,
-    reducedMotion,
-    scheduleTransitionAttempt,
-    snapToEntry,
-  ]);
+  }, [entry.id, reducedMotion]);
 
   useEffect(() => {
     scheduleTransitionAttempt();
-  }, [layers, reducedMotion, scheduleTransitionAttempt]);
+  }, [layers, reducedMotion]);
 
   useGSAP(
     () => {
@@ -259,7 +233,7 @@ function TimelineImagePanel({
                 height={1050}
                 className="h-full w-full object-cover"
                 sizes="(max-width: 1024px) 100vw, 462px"
-                priority={layers[layerIndex].id === allEntries[0]?.id}
+                priority={layers[layerIndex].id === timelineEntries[0]?.id}
                 onLoad={scheduleTransitionAttempt}
               />
             </div>
@@ -369,11 +343,7 @@ function TimelineItem({
   );
 }
 
-export function ExperienceTimeline({
-  timelineEntries,
-}: {
-  timelineEntries: TimelineEntry[];
-}) {
+export function ExperienceTimeline() {
   const listRef = useRef<HTMLUListElement>(null);
   const pointerRef = useRef({ x: 0, y: 0, inside: false });
   const reducedMotion = usePrefersReducedMotion();
@@ -459,11 +429,7 @@ export function ExperienceTimeline({
           </div>
 
           <aside className="experience-preview-aside order-1 lg:order-2 lg:sticky lg:top-28">
-            <TimelineImagePanel
-              entry={activeEntry}
-              allEntries={timelineEntries}
-              reducedMotion={reducedMotion}
-            />
+            <TimelineImagePanel entry={activeEntry} reducedMotion={reducedMotion} />
           </aside>
         </div>
       </div>

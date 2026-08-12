@@ -3,21 +3,14 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowUpRight, Download } from "lucide-react";
-import { getContactIcon } from "@/lib/icons/contact-icons";
+import { ArrowUpRight } from "lucide-react";
+import { resumeLink, socialLinks } from "@/data/contact";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import type { ResumeLink, SocialLink } from "@/lib/content/types";
 
 gsap.registerPlugin(useGSAP);
 
-export function Contact({
-  socialLinks,
-  resumeLink,
-}: {
-  socialLinks: SocialLink[];
-  resumeLink: ResumeLink;
-}) {
+export function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
 
@@ -49,16 +42,12 @@ export function Contact({
 
   const allLinks = [
     ...socialLinks.map((link) => ({
-      label: link.label,
-      href: link.href,
-      Icon: getContactIcon(link.icon),
+      ...link,
       external: !link.href.startsWith("mailto"),
       download: false,
     })),
     {
-      label: resumeLink.label,
-      href: resumeLink.href,
-      Icon: Download,
+      ...resumeLink,
       external: false,
       download: true,
     },
@@ -81,7 +70,7 @@ export function Contact({
 
             <ul className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               {allLinks.map((link) => {
-                const Icon = link.Icon;
+                const Icon = link.icon;
                 return (
                   <li key={link.label}>
                     <a
