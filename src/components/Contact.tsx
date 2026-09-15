@@ -3,10 +3,11 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowUpRight } from "lucide-react";
+import { PiArrowUpRightBold } from "react-icons/pi";
 import { resumeLink, socialLinks } from "@/data/contact";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { attachMagneticHover } from "@/lib/magneticHover";
 
 gsap.registerPlugin(useGSAP);
 
@@ -19,6 +20,7 @@ export function Contact() {
       if (reducedMotion || !sectionRef.current) return;
 
       const links = sectionRef.current.querySelectorAll(".contact-link");
+      const cleanups: Array<() => void> = [];
 
       links.forEach((link) => {
         link.addEventListener("mouseenter", () => {
@@ -35,7 +37,10 @@ export function Contact() {
             duration: 0.25,
           });
         });
+        cleanups.push(attachMagneticHover(link, { strength: 0.2 }));
       });
+
+      return () => cleanups.forEach((cleanup) => cleanup());
     },
     { scope: sectionRef, dependencies: [reducedMotion] },
   );
@@ -78,11 +83,11 @@ export function Contact() {
                       download={link.download || undefined}
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noopener noreferrer" : undefined}
-                      className="contact-link group inline-flex cursor-pointer items-center gap-3 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium transition-colors duration-300 hover:border-accent-blue/40"
+                      className="contact-link group inline-flex cursor-pointer items-center gap-3 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium transition-colors duration-300 will-change-transform hover:border-accent-blue/40"
                     >
                       <Icon className="h-4 w-4 shrink-0 text-muted" />
                       {link.label}
-                      <ArrowUpRight className="link-arrow h-4 w-4 text-muted transition-colors group-hover:text-foreground" />
+                      <PiArrowUpRightBold className="link-arrow h-4 w-4 text-muted transition-colors group-hover:text-foreground" />
                     </a>
                   </li>
                 );

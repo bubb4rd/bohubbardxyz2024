@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
-import { Download, Mail, type LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
+import { PiDownloadBold, PiEnvelopeSimpleBold } from "react-icons/pi";
 
 export function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -27,7 +28,7 @@ export function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
-type ContactIcon = LucideIcon | ComponentType<{ className?: string }>;
+type ContactIcon = IconType | ComponentType<{ className?: string }>;
 
 export type SocialLink = {
   label: string;
@@ -42,11 +43,15 @@ export const socialLinks: SocialLink[] = [
     href: "https://www.linkedin.com/in/bo-hubbard-4988b2246/",
     icon: LinkedInIcon,
   },
-  { label: "Email", href: "mailto:bohubbard8@gmail.com", icon: Mail },
+  {
+    label: "Email",
+    href: "mailto:bohubbard8@gmail.com",
+    icon: PiEnvelopeSimpleBold,
+  },
 ];
 
 export const resumeLink = {
   label: "Resume",
   href: "/cv.pdf",
-  icon: Download,
+  icon: PiDownloadBold,
 };

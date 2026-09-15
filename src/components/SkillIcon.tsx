@@ -24,8 +24,7 @@ import {
   SiTypescript,
   SiWordpress,
 } from "react-icons/si";
-import { Database, Layers, Waypoints } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { PiDatabaseBold, PiStackBold, PiFlowArrowBold } from "react-icons/pi";
 
 const iconMap: Record<string, IconType> = {
   javascript: SiJavascript,
@@ -54,10 +53,10 @@ const iconMap: Record<string, IconType> = {
   mac: SiApple,
 };
 
-const lucideMap: Record<string, LucideIcon> = {
-  sql: Database,
-  swiftui: Layers,
-  rest: Waypoints,
+const extraIconMap: Record<string, IconType> = {
+  sql: PiDatabaseBold,
+  swiftui: PiStackBold,
+  rest: PiFlowArrowBold,
 };
 
 type SkillIconProps = {
@@ -66,18 +65,6 @@ type SkillIconProps = {
 };
 
 export function SkillIcon({ icon, className }: SkillIconProps) {
-  const Lucide = lucideMap[icon];
-
-  if (Lucide) {
-    return (
-      <Lucide
-        className={className}
-        strokeWidth={2.25}
-        aria-hidden="true"
-      />
-    );
-  }
-
-  const Icon = iconMap[icon] ?? SiJavascript;
+  const Icon = extraIconMap[icon] ?? iconMap[icon] ?? SiJavascript;
   return <Icon className={className} aria-hidden="true" />;
 }

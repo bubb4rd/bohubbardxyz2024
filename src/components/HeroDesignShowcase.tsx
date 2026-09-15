@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowUpRight, Star } from "lucide-react";
+import { PiArrowUpRightBold, PiStarFill } from "react-icons/pi";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 gsap.registerPlugin(useGSAP);
@@ -153,7 +153,7 @@ export function HeroDesignShowcase() {
         className="relative mx-auto w-full max-w-[280px] overflow-hidden pt-10 sm:h-[min(420px,72vw)] sm:max-w-[360px] sm:pt-0"
       >
         <span className="hero-spotlight-tag pointer-events-none absolute top-0 right-0 z-20 sm:-top-12 sm:right-0 sm:-right-3">
-          <Star className="h-3.5 w-3.5 fill-accent-violet text-accent-violet" strokeWidth={2} />
+          <PiStarFill className="h-3.5 w-3.5 text-accent-violet" />
           Spotlight
         </span>
 
@@ -201,7 +201,7 @@ export function HeroDesignShowcase() {
         </span>
         <span className="text-border">·</span>
         <span>Behance</span>
-        <ArrowUpRight className="hero-design-arrow h-4 w-4 transition-transform" />
+        <PiArrowUpRightBold className="hero-design-arrow h-4 w-4 transition-transform" />
       </div>
     </a>
   );

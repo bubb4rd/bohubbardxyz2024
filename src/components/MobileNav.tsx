@@ -9,32 +9,32 @@ import {
   type MouseEvent,
 } from "react";
 import { createPortal } from "react-dom";
+import type { IconType } from "react-icons";
 import {
-  Briefcase,
-  FolderKanban,
-  Mail,
-  Menu,
-  User,
-  Wrench,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+  PiBriefcaseBold,
+  PiKanbanBold,
+  PiEnvelopeSimpleBold,
+  PiListBold,
+  PiUserBold,
+  PiWrenchBold,
+  PiXBold,
+} from "react-icons/pi";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const ANIMATION_MS = 320;
 
-const navItems: { id: string; href: string; label: string; icon: LucideIcon }[] =
+const navItems: { id: string; href: string; label: string; icon: IconType }[] =
   [
-    { id: "about", href: "#about", label: "About", icon: User },
+    { id: "about", href: "#about", label: "About", icon: PiUserBold },
     {
       id: "experience",
       href: "#experience",
       label: "Career Roadmap",
-      icon: Briefcase,
+      icon: PiBriefcaseBold,
     },
-    { id: "work", href: "#work", label: "Projects", icon: FolderKanban },
-    { id: "skills", href: "#skills", label: "Skills", icon: Wrench },
-    { id: "contact", href: "#contact", label: "Contact", icon: Mail },
+    { id: "work", href: "#work", label: "Projects", icon: PiKanbanBold },
+    { id: "skills", href: "#skills", label: "Skills", icon: PiWrenchBold },
+    { id: "contact", href: "#contact", label: "Contact", icon: PiEnvelopeSimpleBold },
   ];
 
 function useScrollLock(locked: boolean) {
@@ -190,7 +190,7 @@ export function MobileNav() {
               className="flex h-10 w-10 cursor-pointer touch-manipulation items-center justify-center rounded-full text-foreground"
               aria-label="Close menu"
             >
-              <X className="h-5 w-5" strokeWidth={2} />
+              <PiXBold className="h-5 w-5" />
             </button>
           </div>
 
@@ -240,7 +240,7 @@ export function MobileNav() {
                     className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/5"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground/5 text-muted">
-                      <Icon className="h-4 w-4" strokeWidth={2} />
+                      <Icon className="h-4 w-4" />
                     </span>
                     {item.label}
                   </a>
@@ -275,9 +275,9 @@ export function MobileNav() {
               className="flex h-10 w-10 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-full text-foreground"
             >
               {open ? (
-                <X className="h-5 w-5" strokeWidth={2} />
+                <PiXBold className="h-5 w-5" />
               ) : (
-                <Menu className="h-5 w-5" strokeWidth={2} />
+                <PiListBold className="h-5 w-5" />
               )}
             </button>
           </div>

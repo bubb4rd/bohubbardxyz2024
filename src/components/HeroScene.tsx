@@ -26,14 +26,14 @@ const fragmentShader = `
     float wave2 = sin(length(p) * 8.0 - uTime * 0.18);
     float blend = wave1 * 0.5 + wave2 * 0.5;
 
-    vec3 blue   = vec3(0.231, 0.510, 0.965);
-    vec3 violet = vec3(0.545, 0.361, 0.965);
-    vec3 coral  = vec3(0.957, 0.447, 0.714);
+    vec3 blue = vec3(0.145, 0.388, 0.922);
+    vec3 deep = vec3(0.118, 0.251, 0.686);
+    vec3 navy = vec3(0.090, 0.145, 0.329);
 
-    vec3 color = mix(blue, violet, uv.x + blend * 0.15);
-    color = mix(color, coral, uv.y * 0.55 + blend * 0.1);
+    vec3 color = mix(blue, deep, uv.x + blend * 0.15);
+    color = mix(color, navy, uv.y * 0.55 + blend * 0.1);
 
-    float alpha = 0.07 + blend * 0.025;
+    float alpha = 0.19 + blend * 0.05;
     gl_FragColor = vec4(color, alpha);
   }
 `;

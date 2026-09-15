@@ -3,30 +3,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import type { IconType } from "react-icons";
 import {
-  Briefcase,
-  ChevronLeft,
-  ChevronRight,
-  FolderKanban,
-  Mail,
-  User,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
+  PiBriefcaseBold,
+  PiCaretLeftBold,
+  PiCaretRightBold,
+  PiKanbanBold,
+  PiEnvelopeSimpleBold,
+  PiUserBold,
+  PiWrenchBold,
+} from "react-icons/pi";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
-const navItems: { id: string; href: string; label: string; icon: LucideIcon }[] =
+const navItems: { id: string; href: string; label: string; icon: IconType }[] =
   [
-    { id: "about", href: "#about", label: "About", icon: User },
+    { id: "about", href: "#about", label: "About", icon: PiUserBold },
     {
       id: "experience",
       href: "#experience",
       label: "Career Roadmap",
-      icon: Briefcase,
+      icon: PiBriefcaseBold,
     },
-    { id: "work", href: "#work", label: "Projects", icon: FolderKanban },
-    { id: "skills", href: "#skills", label: "Skills", icon: Wrench },
-    { id: "contact", href: "#contact", label: "Contact", icon: Mail },
+    { id: "work", href: "#work", label: "Projects", icon: PiKanbanBold },
+    { id: "skills", href: "#skills", label: "Skills", icon: PiWrenchBold },
+    { id: "contact", href: "#contact", label: "Contact", icon: PiEnvelopeSimpleBold },
   ];
 
 const sectionIds = ["home", "about", "experience", "work", "skills", "contact"];
@@ -80,7 +80,6 @@ function NavItem({
         className={`h-5 w-5 shrink-0 transition-all duration-300 ease-out ${
           isActive ? "scale-105" : "group-hover:scale-110"
         }`}
-        strokeWidth={isActive ? 2.25 : 2}
       />
 
       <span
@@ -278,9 +277,9 @@ export function Sidebar() {
             aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
           >
             {isPinned ? (
-              <ChevronLeft className="h-4 w-4 shrink-0" />
+              <PiCaretLeftBold className="h-4 w-4 shrink-0" />
             ) : (
-              <ChevronRight className="h-4 w-4 shrink-0" />
+              <PiCaretRightBold className="h-4 w-4 shrink-0" />
             )}
             <span
               className={`overflow-hidden text-xs font-medium whitespace-nowrap transition-all duration-300 ease-out ${

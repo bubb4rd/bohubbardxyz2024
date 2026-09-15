@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Briefcase, GraduationCap } from "lucide-react";
+import { PiBriefcaseBold, PiGraduationCapBold } from "react-icons/pi";
 import { timelineEntries, type TimelineEntry } from "@/data/experience";
 import { Reveal } from "./Reveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -281,7 +281,7 @@ function TimelineItem({
     { scope: itemRef, dependencies: [reducedMotion, isActive] },
   );
 
-  const Icon = entry.type === "education" ? GraduationCap : Briefcase;
+  const Icon = entry.type === "education" ? PiGraduationCapBold : PiBriefcaseBold;
 
   return (
     <li
@@ -345,6 +345,7 @@ function TimelineItem({
 
 export function ExperienceTimeline() {
   const listRef = useRef<HTMLUListElement>(null);
+  const asideRef = useRef<HTMLElement>(null);
   const pointerRef = useRef({ x: 0, y: 0, inside: false });
   const reducedMotion = usePrefersReducedMotion();
   const [activeId, setActiveId] = useState(timelineEntries[0]?.id ?? "");
@@ -389,6 +390,34 @@ export function ExperienceTimeline() {
     { scope: listRef, dependencies: [reducedMotion] },
   );
 
+  useGSAP(
+    () => {
+      if (reducedMotion || !asideRef.current || !listRef.current) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        const trigger = ScrollTrigger.create({
+          trigger: asideRef.current,
+          start: "top 112px",
+          end: () =>
+            `+=${
+              (listRef.current?.offsetHeight ?? 0) -
+              (asideRef.current?.offsetHeight ?? 0)
+            }`,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        });
+
+        return () => trigger.kill();
+      });
+
+      return () => mm.revert();
+    },
+    { dependencies: [reducedMotion] },
+  );
+
   if (!activeEntry) return null;
 
   return (
@@ -428,7 +457,12 @@ export function ExperienceTimeline() {
             </ul>
           </div>
 
-          <aside className="experience-preview-aside order-1 lg:order-2 lg:sticky lg:top-28">
+          <aside
+            ref={asideRef}
+            className={`experience-preview-aside order-1 lg:order-2 ${
+              reducedMotion ? "lg:sticky lg:top-28" : ""
+            }`}
+          >
             <TimelineImagePanel entry={activeEntry} reducedMotion={reducedMotion} />
           </aside>
         </div>

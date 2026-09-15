@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { PiArrowUpBold } from "react-icons/pi";
 
 const SCROLL_THRESHOLD = 400;
 
@@ -30,7 +30,7 @@ export function ScrollToTop() {
           : "pointer-events-none translate-y-2 opacity-0"
       }`}
     >
-      <ArrowUp className="h-5 w-5" strokeWidth={2} />
+      <PiArrowUpBold className="h-5 w-5" />
     </button>
   );
 }

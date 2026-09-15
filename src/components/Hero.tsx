@@ -3,11 +3,12 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowRight } from "lucide-react";
+import { PiArrowRightBold } from "react-icons/pi";
 import dynamic from "next/dynamic";
 import { resumeLink } from "@/data/contact";
 import { RotatingRoles } from "./RotatingRoles";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { attachMagneticHover } from "@/lib/magneticHover";
 
 gsap.registerPlugin(useGSAP);
 
@@ -26,8 +27,36 @@ export function Hero() {
       if (reducedMotion) return;
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".hero-line-1", { y: 48, opacity: 0, duration: 0.9 })
-        .from(".hero-line-2", { y: 40, opacity: 0, duration: 0.85 }, "-=0.55")
+      tl.from(".hero-line-1", {
+        y: 48,
+        opacity: 0,
+        filter: "blur(14px)",
+        duration: 1,
+      })
+        .from(
+          ".hero-line-2",
+          { y: 40, opacity: 0, filter: "blur(14px)", duration: 0.95 },
+          "-=0.6",
+        )
+        .from(
+          ".hero-highlight-bg",
+          {
+            scaleX: 0,
+            transformOrigin: "left center",
+            duration: 1.05,
+            ease: "expo.out",
+          },
+          "-=0.55",
+        )
+        .from(
+          ".hero-highlight-text",
+          {
+            clipPath: "inset(0 100% 0 0)",
+            duration: 1.05,
+            ease: "expo.out",
+          },
+          "<",
+        )
         .from(".hero-name", { y: 24, opacity: 0, duration: 0.7 }, "-=0.45")
         .from(
           ".hero-bottom-item",
@@ -40,6 +69,12 @@ export function Hero() {
           },
           "-=0.35",
         );
+
+      const cleanups = gsap.utils
+        .toArray<HTMLElement>(".hero-magnetic")
+        .map((el) => attachMagneticHover(el, { strength: 0.25 }));
+
+      return () => cleanups.forEach((cleanup) => cleanup());
     },
     { scope: containerRef, dependencies: [reducedMotion] },
   );
@@ -59,7 +94,12 @@ export function Hero() {
             <div className="hero-headline-wrap text-center">
               <h1 className="hero-headline font-display font-semibold">
                 <span className="hero-line-1 block text-foreground">Intentional</span>
-                <span className="hero-line-2 hero-gradient-text block">Design.</span>
+                <span className="hero-line-2 block">
+                  <span className="hero-highlight">
+                    <span className="hero-highlight-bg" aria-hidden="true" />
+                    <span className="hero-highlight-text">Design.</span>
+                  </span>
+                </span>
               </h1>
               <p className="hero-name mt-5 font-display text-2xl font-medium tracking-tight text-muted sm:mt-6 sm:text-3xl">
                 Bo Hubbard
@@ -85,17 +125,17 @@ export function Hero() {
               <a
                 href={resumeLink.href}
                 download
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 py-2.5 font-display text-sm font-semibold text-background transition-opacity duration-300 hover:opacity-90"
+                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 py-2.5 font-display text-sm font-semibold text-background transition-opacity duration-300 will-change-transform hover:opacity-90"
               >
                 {resumeLink.label}
-                <ResumeIcon className="h-4 w-4" strokeWidth={2} />
+                <ResumeIcon className="h-4 w-4" />
               </a>
               <a
                 href="#about"
-                className="inline-flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-foreground transition-opacity duration-300 hover:opacity-70"
+                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-foreground transition-opacity duration-300 will-change-transform hover:opacity-70"
               >
                 Know more
-                <ArrowRight className="h-4 w-4" strokeWidth={2} />
+                <PiArrowRightBold className="h-4 w-4" />
               </a>
             </div>
           </div>
