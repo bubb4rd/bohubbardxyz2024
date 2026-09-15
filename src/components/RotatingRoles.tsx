@@ -58,7 +58,7 @@ export function RotatingRoles({ className = "text-lg sm:text-xl" }: { className?
     <span
       ref={containerRef}
       className={`relative inline-block overflow-hidden align-bottom ${className}`}
-      style={{ height: "1.35em", minWidth: "19ch" }}
+      style={{ height: "1.35em", minWidth: "21ch" }}
       aria-live="polite"
     >
       <span

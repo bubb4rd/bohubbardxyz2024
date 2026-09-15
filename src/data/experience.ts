@@ -1,4 +1,5 @@
 export const heroRoles = [
+  "Forward Deployed Engineer",
   "Software Developer",
   "App Developer",
   "UI Designer",
@@ -23,12 +24,12 @@ export const timelineEntries: TimelineEntry[] = [
   {
     id: "wkcc",
     type: "work",
-    title: "Software Development Intern",
+    title: "Forward Deployed Engineer Intern",
     organization: "Wilmette Kenilworth Chamber of Commerce",
     location: "Wilmette, IL",
     start: "June 2026",
     end: "Present",
-    description: "Building WKCC Perks, a SwiftUI app for 50+ local chamber businesses, and more.",
+    description: "Building WKCC Perks, a SwiftUI app for 200+ local chamber businesses, and more.",
     accent: "#3B82F6",
     image:
       "/images/WKCCLogo.png",
