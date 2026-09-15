@@ -96,12 +96,12 @@ export function Hero() {
                 <span className="hero-line-1 block text-white">Intentional</span>
                 <span className="hero-line-2 block">
                   <span className="hero-highlight">
-                    <span className="hero-highlight-bg" aria-hidden="true" />
+                    <span className="hero-highlight-bg rounded-sm" aria-hidden="true" />
                     <span className="hero-highlight-text">Design.</span>
                   </span>
                 </span>
               </h1>
-              <p className="hero-name mt-5 font-display text-2xl font-bold tracking-tight text-white sm:mt-6 sm:text-3xl">
+              <p className="hero-name mt-5 font-display text-4xl font-bold tracking-tight text-white sm:mt-6">
                 Bo Hubbard
               </p>
             </div>

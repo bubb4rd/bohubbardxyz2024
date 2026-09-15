@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PiMapPinBold } from "react-icons/pi";
 
 const LOCATION = "Chicago, IL";
 const TIME_ZONE = "America/Chicago";
@@ -15,11 +14,33 @@ function formatCentralTime(date: Date) {
   }).format(date);
 }
 
+type DayPhase = { emoji: string; label: string };
+
+function getDayPhase(date: Date, timeZone: string): DayPhase {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      hour: "numeric",
+      hour12: false,
+    }).format(date),
+  );
+
+  if (hour >= 5 && hour < 7) return { emoji: "🌅", label: "sunrise" };
+  if (hour >= 7 && hour < 17) return { emoji: "☀️", label: "daytime" };
+  if (hour >= 17 && hour < 20) return { emoji: "🌇", label: "sunset" };
+  return { emoji: "🌙", label: "night" };
+}
+
 export function AboutLocationBlurb() {
   const [time, setTime] = useState<string | null>(null);
+  const [phase, setPhase] = useState<DayPhase | null>(null);
 
   useEffect(() => {
-    const update = () => setTime(formatCentralTime(new Date()));
+    const update = () => {
+      const now = new Date();
+      setTime(formatCentralTime(now));
+      setPhase(getDayPhase(now, TIME_ZONE));
+    };
     update();
 
     const interval = window.setInterval(update, 30_000);
@@ -29,8 +50,12 @@ export function AboutLocationBlurb() {
   return (
     <li>
       <span className="about-blurb-tag inline-flex items-center gap-2.5 rounded-2xl border border-border bg-surface px-3 py-2 shadow-[0_8px_24px_rgba(24,24,27,0.04)]">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-foreground/5 text-foreground">
-          <PiMapPinBold className="h-4 w-4" aria-hidden="true" />
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-foreground/2 text-base"
+          role="img"
+          aria-label={phase ? phase.label : "loading time of day"}
+        >
+          {phase ? phase.emoji : "🕐"}
         </span>
         <span className="pr-1 text-sm font-medium text-foreground tabular-nums">
           {LOCATION} ({time ? `${time} CT` : "—:— CT"})
