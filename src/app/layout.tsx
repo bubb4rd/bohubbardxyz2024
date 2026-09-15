@@ -16,11 +16,11 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Bo Hubbard — Developer & Designer",
+  title: "Bo Hubbard | bohubbard.xyz",
   description:
     "Portfolio of William (Bo) Hubbard — software developer, graphic designer, and ASU Computer Science graduate.",
   openGraph: {
-    title: "Bo Hubbard — Developer & Designer",
+    title: "Bo Hubbard | bohubbard.xyz",
     description:
       "Software development, graphic design, and interfaces with intention.",
     url: "https://bohubbard.xyz",

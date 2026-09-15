@@ -287,36 +287,44 @@ function TimelineItem({
     <li
       ref={itemRef}
       data-timeline-id={entry.id}
-      className="relative flex gap-6 pb-12 last:pb-0"
+      className="relative flex gap-6 pb-8 last:pb-0"
       onMouseEnter={onActivate}
       onFocus={onActivate}
       onClick={onActivate}
       tabIndex={0}
     >
-      <div className="relative flex w-10 shrink-0 flex-col items-center">
+      <div className="relative flex w-10 shrink-0 flex-col items-center pt-4">
         <div
-          className="timeline-dot z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 border-surface shadow-sm transition-transform duration-300"
+          className="timeline-dot z-10 flex h-9 w-9 items-center justify-center rounded-full transition-[transform,background-color,box-shadow] duration-300"
           style={{
-            backgroundColor: `${entry.accent}${isActive ? "28" : "18"}`,
-            borderColor: `${entry.accent}${isActive ? "70" : "40"}`,
-            transform: isActive ? "scale(1.15)" : undefined,
+            backgroundColor: `${entry.accent}${isActive ? "28" : "14"}`,
+            boxShadow: isActive
+              ? `0 8px 22px ${entry.accent}35, 0 0 0 1px ${entry.accent}40`
+              : `0 0 0 1px ${entry.accent}20`,
+            transform: isActive ? "scale(1.1)" : undefined,
           }}
         >
-          <Icon className="h-4 w-4" style={{ color: entry.accent }} />
+          <Icon
+            className="h-3.5 w-3.5"
+            style={{ color: entry.accent }}
+            aria-hidden="true"
+          />
         </div>
       </div>
 
-      <article className="timeline-card min-w-0 flex-1 pt-1">
+      <article
+        className="timeline-card relative -mx-4 min-w-0 flex-1 rounded-2xl px-4 py-3 transition-colors duration-300"
+        style={{
+          backgroundColor: isActive ? `${entry.accent}0d` : "transparent",
+        }}
+      >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <time className="text-xs font-medium tracking-wider text-muted uppercase">
-            {entry.start} — {entry.end}
+            {entry.start} - {entry.end}
           </time>
           <span
-            className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
-            style={{
-              backgroundColor: `${entry.accent}14`,
-              color: entry.accent,
-            }}
+            className="text-[10px] font-semibold tracking-[0.16em] uppercase"
+            style={{ color: entry.accent }}
           >
             {entry.type}
           </span>

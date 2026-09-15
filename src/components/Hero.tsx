@@ -93,7 +93,7 @@ export function Hero() {
           <div className="hero-headline-stage flex min-h-0 items-center justify-center px-2 py-8 sm:px-6 sm:py-12 md:py-16">
             <div className="hero-headline-wrap text-center">
               <h1 className="hero-headline font-display font-semibold">
-                <span className="hero-line-1 block text-foreground">Intentional</span>
+                <span className="hero-line-1 block text-white">Intentional</span>
                 <span className="hero-line-2 block">
                   <span className="hero-highlight">
                     <span className="hero-highlight-bg" aria-hidden="true" />
@@ -101,7 +101,7 @@ export function Hero() {
                   </span>
                 </span>
               </h1>
-              <p className="hero-name mt-5 font-display text-2xl font-medium tracking-tight text-muted sm:mt-6 sm:text-3xl">
+              <p className="hero-name mt-5 font-display text-2xl font-bold tracking-tight text-white sm:mt-6 sm:text-3xl">
                 Bo Hubbard
               </p>
             </div>
@@ -112,11 +112,11 @@ export function Hero() {
               <RotatingRoles className="text-base sm:text-lg" />
             </div>
 
-            <p className="hero-bottom-item mt-4 text-sm text-muted">
+            <p className="hero-bottom-item mt-4 text-md text-white">
               B.S. Computer Science · Class of 2026
             </p>
 
-            <p className="hero-bottom-item mt-4 text-sm leading-relaxed text-muted md:text-base">
+            <p className="hero-bottom-item mt-4 text-md leading-relaxed text-white/85 md:text-base">
               Software development, graphic design, and interfaces built with
               purpose.
             </p>
@@ -125,14 +125,14 @@ export function Hero() {
               <a
                 href={resumeLink.href}
                 download
-                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 rounded-full bg-foreground px-4 py-2.5 font-display text-sm font-semibold text-background transition-opacity duration-300 will-change-transform hover:opacity-90"
+                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 rounded-sm bg-white px-4 py-2.5 font-display text-md font-semibold text-foreground transition-opacity duration-300 will-change-transform hover:opacity-90"
               >
                 {resumeLink.label}
                 <ResumeIcon className="h-4 w-4" />
               </a>
               <a
                 href="#about"
-                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 font-display text-sm font-semibold text-foreground transition-opacity duration-300 will-change-transform hover:opacity-70"
+                className="hero-magnetic inline-flex cursor-pointer items-center gap-2 font-display text-md font-semibold text-white/90 transition-opacity duration-300 will-change-transform hover:opacity-70"
               >
                 Know more
                 <PiArrowRightBold className="h-4 w-4" />

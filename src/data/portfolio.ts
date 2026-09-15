@@ -14,6 +14,19 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "elovatesr",
+    title: "Elovate SR",
+    subtitle: "Warzone rank tracker",
+    description:
+      "Full-stack Call of Duty: Warzone rank tracker with a live leaderboard, cloud-synced progression calculator, and OCR-powered stat extraction from match screenshots.",
+    tags: ["Next.js", "TypeScript", "Supabase", "Google Cloud Vision"],
+    href: "https://elovatesr.com",
+    category: "dev",
+    accent: "#EAB308",
+    featured: true,
+    image: "/images/elovatesr-cover.jpg",
+  },
+  {
     id: "wkcc-perks",
     title: "WKCC Perks",
     subtitle: "iOS application",
@@ -26,19 +39,6 @@ export const projects: Project[] = [
     featured: true,
     image:
       "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1400&q=80&auto=format&fit=crop",
-  },
-  {
-    id: "elovatesr",
-    title: "Elovate SR",
-    subtitle: "Warzone rank tracker",
-    description:
-      "Full-stack Call of Duty: Warzone rank tracker with a live leaderboard, cloud-synced progression calculator, and OCR-powered stat extraction from match screenshots.",
-    tags: ["Next.js", "TypeScript", "Supabase", "Google Cloud Vision"],
-    href: "https://elovatesr.com",
-    category: "dev",
-    accent: "#EAB308",
-    featured: true,
-    image: "/images/elovatesr-cover.jpg",
   },
   {
     id: "pantrypulse",

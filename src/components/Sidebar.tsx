@@ -55,12 +55,14 @@ function NavItem({
   item,
   isActive,
   isExpanded,
+  heroDark,
   showOutsideLabel,
   itemRef,
 }: {
   item: (typeof navItems)[number];
   isActive: boolean;
   isExpanded: boolean;
+  heroDark: boolean;
   showOutsideLabel: boolean;
   itemRef?: (el: HTMLAnchorElement | null) => void;
 }) {
@@ -74,7 +76,15 @@ function NavItem({
       aria-current={isActive ? "page" : undefined}
       className={`group relative flex cursor-pointer items-center overflow-visible rounded-xl transition-colors duration-300 ease-out ${
         isExpanded ? "gap-0 px-3 py-3" : "justify-center px-0 py-3"
-      } ${isActive ? "text-foreground" : "text-muted hover:text-foreground"}`}
+      } ${
+        isActive
+          ? heroDark
+            ? "text-white"
+            : "text-foreground"
+          : heroDark
+            ? "text-white/50 hover:text-white"
+            : "text-muted hover:text-foreground"
+      }`}
     >
       <Icon
         className={`h-5 w-5 shrink-0 transition-all duration-300 ease-out ${
@@ -117,6 +127,8 @@ export function Sidebar() {
   const [isPinned, setIsPinned] = useState(false);
   const isWideViewport = useWideSidebar();
   const isExpanded = isPinned || isHovered;
+  const isOnHero = active === "home";
+  const heroDark = isOnHero && !isExpanded;
 
   const moveIndicator = useCallback(() => {
     const nav = navRef.current;
@@ -237,7 +249,7 @@ export function Sidebar() {
             href="#home"
             className={`font-display mb-1 flex cursor-pointer items-center overflow-visible rounded-xl py-3 font-semibold tracking-tight transition-all duration-300 ease-out ${
               isExpanded ? "gap-0 px-3" : "justify-center px-0"
-            }`}
+            } ${heroDark ? "text-white" : ""}`}
             aria-label="Bo Hubbard home"
           >
             <span className="text-base leading-none">
@@ -259,6 +271,7 @@ export function Sidebar() {
               item={item}
               isActive={active === item.id}
               isExpanded={isExpanded}
+              heroDark={heroDark}
               showOutsideLabel={
                 isWideViewport && !isExpanded && active === item.id
               }
@@ -271,9 +284,13 @@ export function Sidebar() {
           <button
             type="button"
             onClick={() => setIsPinned((p) => !p)}
-            className={`mt-1 flex cursor-pointer items-center overflow-visible rounded-xl py-3 text-muted transition-all duration-300 ease-out hover:text-foreground ${
+            className={`mt-1 flex cursor-pointer items-center overflow-visible rounded-xl py-3 transition-all duration-300 ease-out ${
               isExpanded ? "px-3" : "justify-center px-0"
-            } ${isPinned ? "text-foreground" : ""}`}
+            } ${
+              heroDark
+                ? `text-white/50 hover:text-white ${isPinned ? "text-white" : ""}`
+                : `text-muted hover:text-foreground ${isPinned ? "text-foreground" : ""}`
+            }`}
             aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
           >
             {isPinned ? (

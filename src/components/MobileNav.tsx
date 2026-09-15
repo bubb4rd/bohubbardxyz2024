@@ -20,8 +20,10 @@ import {
   PiXBold,
 } from "react-icons/pi";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 const ANIMATION_MS = 320;
+const sectionIds = ["home", "about", "experience", "work", "skills", "contact"];
 
 const navItems: { id: string; href: string; label: string; icon: IconType }[] =
   [
@@ -98,6 +100,8 @@ export function MobileNav() {
   const [mounted, setMounted] = useState(false);
   const [active, setActive] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
+  const activeSection = useActiveSection(sectionIds);
+  const isOnHero = activeSection === "home";
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -256,36 +260,32 @@ export function MobileNav() {
   return (
     <>
       <div className="mobile-nav md:hidden">
-        <header className="mobile-nav__bar fixed inset-x-0 top-0 z-[100] border-b border-border/80 bg-background pt-[env(safe-area-inset-top)]">
-          <div className="flex h-14 items-center justify-between px-4">
-            <a
-              href="#home"
-              className="font-display text-base font-semibold tracking-tight"
-              aria-label="Bo Hubbard home"
-            >
-              BH<span className="text-gradient">.</span>
-            </a>
+        <a
+          href="#home"
+          className={`absolute top-[calc(env(safe-area-inset-top)+0.75rem)] left-4 z-[100] font-display text-base font-semibold tracking-tight transition-colors duration-300 ease-out ${
+            isOnHero ? "text-white" : "text-foreground"
+          }`}
+          aria-label="Bo Hubbard home"
+        >
+          BH<span className="text-gradient">.</span>
+        </a>
 
-            <button
-              type="button"
-              onClick={() => setOpen((value) => !value)}
-              aria-expanded={open}
-              aria-controls="mobile-nav-panel"
-              aria-label={open ? "Close menu" : "Open menu"}
-              className="flex h-10 w-10 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-full text-foreground"
-            >
-              {open ? (
-                <PiXBold className="h-5 w-5" />
-              ) : (
-                <PiListBold className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-        </header>
-        <div
-          className="h-[calc(3.5rem+env(safe-area-inset-top))]"
-          aria-hidden="true"
-        />
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-controls="mobile-nav-panel"
+          aria-label={open ? "Close menu" : "Open menu"}
+          className={`fixed top-[calc(env(safe-area-inset-top)+0.5rem)] right-2 z-[100] flex h-10 w-10 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-full transition-colors duration-300 ease-out ${
+            isOnHero ? "text-white" : "text-foreground"
+          }`}
+        >
+          {open ? (
+            <PiXBold className="h-5 w-5" />
+          ) : (
+            <PiListBold className="h-5 w-5" />
+          )}
+        </button>
       </div>
       {menuOverlay}
     </>

@@ -18,9 +18,6 @@ export function useActiveSection(sectionIds: string[]) {
   }, [active]);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 768px)");
-    if (!desktop.matches) return;
-
     const elements = sectionIds
       .map((id) => document.getElementById(id))
       .filter(Boolean) as HTMLElement[];
@@ -110,23 +107,9 @@ export function useActiveSection(sectionIds: string[]) {
       frame = requestAnimationFrame(pickSection);
     };
 
-    const onDesktopChange = (event: MediaQueryListEvent) => {
-      if (!event.matches) {
-        cancelAnimationFrame(frame);
-        if (settleTimerRef.current !== null) {
-          window.clearTimeout(settleTimerRef.current);
-          settleTimerRef.current = null;
-        }
-        pendingRef.current = null;
-        return;
-      }
-      schedulePick();
-    };
-
     schedulePick();
     window.addEventListener("scroll", schedulePick, { passive: true });
     window.addEventListener("resize", schedulePick);
-    desktop.addEventListener("change", onDesktopChange);
 
     return () => {
       cancelAnimationFrame(frame);
@@ -135,7 +118,6 @@ export function useActiveSection(sectionIds: string[]) {
       }
       window.removeEventListener("scroll", schedulePick);
       window.removeEventListener("resize", schedulePick);
-      desktop.removeEventListener("change", onDesktopChange);
     };
   }, [sectionIds]);
 

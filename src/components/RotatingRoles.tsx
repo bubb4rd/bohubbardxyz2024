@@ -63,7 +63,7 @@ export function RotatingRoles({ className = "text-lg sm:text-xl" }: { className?
     >
       <span
         ref={textRef}
-        className="absolute inset-x-0 top-0 font-medium text-gradient whitespace-nowrap"
+        className="absolute inset-x-0 top-0 font-medium text-sky-300 whitespace-nowrap"
       >
         {heroRoles[roleIndex]}
       </span>
