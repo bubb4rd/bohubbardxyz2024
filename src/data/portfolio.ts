@@ -38,7 +38,7 @@ export const projects: Project[] = [
     accent: "#3B82F6",
     featured: true,
     image:
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1400&q=80&auto=format&fit=crop",
+      "/images/wkcc-long.png",
   },
   {
     id: "pantrypulse",
