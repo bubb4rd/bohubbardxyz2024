@@ -412,8 +412,9 @@ html.menu-open {
   position: relative;
   display: inline-block;
   isolation: isolate;
-  padding: 0.01em 0.1em 0.05em 0em;
+  padding: .05em .1em;
   margin: -0.03em -0.1em;
+  border-radius: 0.05em;
 }
 
 .hero-highlight-bg {
@@ -421,7 +422,7 @@ html.menu-open {
   inset: 0;
   z-index: 0;
   background: var(--background);
-  border-radius: 0em;
+  border-radius: 0.05em;
   transform: scaleX(1);
 }
 
